@@ -211,7 +211,7 @@ class _ProductDetailState extends State<ProductDetailView>
                             expandedHeight: PsDimens.space300,
                             iconTheme: Theme.of(context)
                                 .iconTheme
-                                .copyWith(color: PsColors.mainColorWithWhite),
+                                .copyWith(color: PsColors.mainColor),
                             leading: PsBackButtonWithCircleBgWidget(
                                 isReadyToShow: isReadyToShowAppBarIcons),
                             floating: false,
@@ -237,16 +237,12 @@ class _ProductDetailState extends State<ProductDetailView>
                                   options: CarouselOptions(
                                     enlargeCenterPage: true,
                                     autoPlay: false,
-                                    viewportFraction: 0.9,
+                                    viewportFraction: 0.8,
                                     enableInfiniteScroll: false,
                                     autoPlayInterval:
                                         const Duration(seconds: 5),
                                     onPageChanged: (int i,
-                                        CarouselPageChangedReason reason) {
-                                      // setState(() {
-                                      //   // _currentId = widget.blogList[i].id;
-                                      // });
-                                    },
+                                        CarouselPageChangedReason reason) {},
                                   ),
                                   items: List.generate(
                                       int.parse(widget.product.photoCount),
@@ -272,8 +268,8 @@ class _ProductDetailState extends State<ProductDetailView>
                                         return GalleryProvider(
                                             repo: galleryRepo);
                                       }, onProviderReady:
-                                          (GalleryProvider provider2) {
-                                        provider2.loadImageList(
+                                          (GalleryProvider provider2) async {
+                                        await provider2.loadImageList(
                                             widget.product.defaultPhoto
                                                 .imgParentId,
                                             PsConst.ITEM_TYPE);
@@ -293,9 +289,14 @@ class _ProductDetailState extends State<ProductDetailView>
                                                     width: double.infinity,
                                                     height: double.infinity,
                                                     imagePath: provider2
-                                                        .galleryList
-                                                        .data[index]
-                                                        .imgPath,
+                                                            .galleryList
+                                                            .data
+                                                            .isEmpty
+                                                        ? 'assets/images/placeholder_image.png'
+                                                        : provider2
+                                                            .galleryList
+                                                            .data[index]
+                                                            .imgPath,
                                                     // onTap: widget.onImageTap,
                                                     boxfit: BoxFit.cover,
                                                   ),

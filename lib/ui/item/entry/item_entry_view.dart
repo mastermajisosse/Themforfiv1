@@ -140,8 +140,11 @@ class _ItemEntryViewState extends State<ItemEntryView> {
 
       if (isSelectedFirstImagePath) {
         final PsResource<DefaultPhoto> _apiStatus =
-            await galleryProvider.postItemImageUpload(itemId, firstImageId,
-                await Utils.getImageFileFromAssets(firstSelectedImageAsset,PsConfig.uploadImageSize));
+            await galleryProvider.postItemImageUpload(
+                itemId,
+                firstImageId,
+                await Utils.getImageFileFromAssets(
+                    firstSelectedImageAsset, PsConfig.uploadImageSize));
         if (_apiStatus.data != null) {
           isSelectedFirstImagePath = false;
           _isFirstDone = isSelectedFirstImagePath;
@@ -156,8 +159,11 @@ class _ItemEntryViewState extends State<ItemEntryView> {
       }
       if (isSelectedSecondImagePath) {
         final PsResource<DefaultPhoto> _apiStatus =
-            await galleryProvider.postItemImageUpload(itemId, secondImageId,
-                await Utils.getImageFileFromAssets(secondSelectedImageAsset,PsConfig.uploadImageSize));
+            await galleryProvider.postItemImageUpload(
+                itemId,
+                secondImageId,
+                await Utils.getImageFileFromAssets(
+                    secondSelectedImageAsset, PsConfig.uploadImageSize));
         if (_apiStatus.data != null) {
           isSelectedSecondImagePath = false;
           _isSecondDone = isSelectedSecondImagePath;
@@ -171,8 +177,11 @@ class _ItemEntryViewState extends State<ItemEntryView> {
       }
       if (isSelectedThirdImagePath) {
         final PsResource<DefaultPhoto> _apiStatus =
-            await galleryProvider.postItemImageUpload(itemId, thirdImageId,
-                await Utils.getImageFileFromAssets(thirdSelectedImageAsset,PsConfig.uploadImageSize));
+            await galleryProvider.postItemImageUpload(
+                itemId,
+                thirdImageId,
+                await Utils.getImageFileFromAssets(
+                    thirdSelectedImageAsset, PsConfig.uploadImageSize));
         if (_apiStatus.data != null) {
           isSelectedThirdImagePath = false;
           _isThirdDone = isSelectedThirdImagePath;
@@ -184,8 +193,11 @@ class _ItemEntryViewState extends State<ItemEntryView> {
       }
       if (isSelectedFouthImagePath) {
         final PsResource<DefaultPhoto> _apiStatus =
-            await galleryProvider.postItemImageUpload(itemId, fourthImageId,
-                await Utils.getImageFileFromAssets(fouthSelectedImageAsset,PsConfig.uploadImageSize));
+            await galleryProvider.postItemImageUpload(
+                itemId,
+                fourthImageId,
+                await Utils.getImageFileFromAssets(
+                    fouthSelectedImageAsset, PsConfig.uploadImageSize));
         if (_apiStatus.data != null) {
           isSelectedFouthImagePath = false;
           _isFouthDone = isSelectedFouthImagePath;
@@ -197,8 +209,11 @@ class _ItemEntryViewState extends State<ItemEntryView> {
       }
       if (isSelectedFifthImagePath) {
         final PsResource<DefaultPhoto> _apiStatus =
-            await galleryProvider.postItemImageUpload(itemId, fiveImageId,
-                await Utils.getImageFileFromAssets(fifthSelectedImageAsset,PsConfig.uploadImageSize));
+            await galleryProvider.postItemImageUpload(
+                itemId,
+                fiveImageId,
+                await Utils.getImageFileFromAssets(
+                    fifthSelectedImageAsset, PsConfig.uploadImageSize));
         if (_apiStatus.data != null) {
           print('5 image uploaded');
           isSelectedFifthImagePath = false;
@@ -717,7 +732,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                     return WarningDialog(
                       message:
                           Utils.getString(context, 'item_entry_need_image'),
-                      onPressed: (){},
+                      onPressed: () {},
                     );
                   });
             } else if (widget.userInputListingTitle.text == null ||
@@ -728,7 +743,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                     return WarningDialog(
                       message: Utils.getString(
                           context, 'item_entry__need_listing_title'),
-                      onPressed: (){},
+                      onPressed: () {},
                     );
                   });
             } else if (widget.categoryController.text == null ||
@@ -739,7 +754,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                     return WarningDialog(
                       message:
                           Utils.getString(context, 'item_entry_need_category'),
-                      onPressed: (){},
+                      onPressed: () {},
                     );
                   });
             } else if (widget.subCategoryController.text == null ||
@@ -750,7 +765,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                     return WarningDialog(
                       message: Utils.getString(
                           context, 'item_entry_need_subcategory'),
-                      onPressed: (){},
+                      onPressed: () {},
                     );
                   });
             } else if (widget.typeController.text == null ||
@@ -760,7 +775,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                   builder: (BuildContext context) {
                     return WarningDialog(
                       message: Utils.getString(context, 'item_entry_need_type'),
-                      onPressed: (){},
+                      onPressed: () {},
                     );
                   });
             } else if (widget.itemConditionController.text == null ||
@@ -771,7 +786,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                     return WarningDialog(
                       message: Utils.getString(
                           context, 'item_entry_need_item_condition'),
-                      onPressed: (){},
+                      onPressed: () {},
                     );
                   });
             } else if (widget.priceController.text == null ||
@@ -782,7 +797,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                     return WarningDialog(
                       message: Utils.getString(
                           context, 'item_entry_need_currency_symbol'),
-                      onPressed: (){},
+                      onPressed: () {},
                     );
                   });
             } else if (widget.userInputPrice.text == null ||
@@ -793,7 +808,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                     return WarningDialog(
                       message:
                           Utils.getString(context, 'item_entry_need_price'),
-                      onPressed: (){},
+                      onPressed: () {},
                     );
                   });
             } else if (widget.userInputDescription.text == null ||
@@ -804,21 +819,23 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                     return WarningDialog(
                       message: Utils.getString(
                           context, 'item_entry_need_description'),
-                      onPressed: (){},
+                      onPressed: () {},
                     );
                   });
-            } else if (widget.dealOptionController.text == null ||
-                widget.dealOptionController.text == '') {
-              showDialog<dynamic>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return WarningDialog(
-                      message: Utils.getString(
-                          context, 'item_entry_need_deal_option'),
-                      onPressed: (){},
-                    );
-                  });
-            } else {
+            }
+            //  else if (widget.dealOptionController.text == null ||
+            //     widget.dealOptionController.text == '') {
+            //   showDialog<dynamic>(
+            //       context: context,
+            //       builder: (BuildContext context) {
+            //         return WarningDialog(
+            //           message: Utils.getString(
+            //               context, 'item_entry_need_deal_option'),
+            //           onPressed: () {},
+            //         );
+            //       });
+            // }
+            else {
               if (!PsProgressDialog.isShowing()) {
                 PsProgressDialog.showDialog(context);
               }
@@ -833,7 +850,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                   itemPriceTypeId: widget.provider.itemPriceTypeId,
                   itemCurrencyId: widget.provider.itemCurrencyId,
                   price: widget.userInputPrice.text,
-                  dealOptionId: widget.provider.itemDealOptionId,
+                  // dealOptionId: widget.provider.itemDealOptionId,
                   itemLocationId: widget.provider.itemLocationId,
                   businessMode: widget.provider.checkOrNotShop,
                   isSoldOut: '', //must be ''
@@ -842,7 +859,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                   highlightInfomation:
                       widget.userInputHighLightInformation.text,
                   description: widget.userInputDescription.text,
-                  dealOptionRemark: widget.userInputDealOptionText.text,
+                  // dealOptionRemark: widget.userInputDealOptionText.text,
                   latitude: widget.userInputLattitude.text,
                   longitude: widget.userInputLongitude.text,
                   address: widget.userInputAddress.text,
@@ -875,7 +892,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                   itemPriceTypeId: widget.provider.itemPriceTypeId,
                   itemCurrencyId: widget.provider.itemCurrencyId,
                   price: widget.userInputPrice.text,
-                  dealOptionId: widget.provider.itemDealOptionId,
+                  // dealOptionId: widget.provider.itemDealOptionId,
                   itemLocationId: widget.provider.itemLocationId,
                   businessMode: widget.provider.checkOrNotShop,
                   isSoldOut: widget.item.isSoldOut,
@@ -884,7 +901,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                   highlightInfomation:
                       widget.userInputHighLightInformation.text,
                   description: widget.userInputDescription.text,
-                  dealOptionRemark: widget.userInputDealOptionText.text,
+                  // dealOptionRemark: widget.userInputDealOptionText.text,
                   latitude: widget.userInputLattitude.text,
                   longitude: widget.userInputLongitude.text,
                   address: widget.userInputAddress.text,
@@ -895,7 +912,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                 final PsResource<Product> itemData = await widget.provider
                     .postItemEntry(itemEntryParameterHolder.toMap());
                 PsProgressDialog.dismissDialog();
-                
+
                 if (itemData.data != null) {
                   Fluttertoast.showToast(
                       msg: 'Item Uploaded',
@@ -1051,6 +1068,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          // ANCHOR here
           PriceDropDownControllerWidget(
             currencySymbolController: widget.priceController,
           ),
@@ -1114,13 +1132,13 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
           ),
         ],
       ),
-      PsTextFieldWidget(
-        titleText: Utils.getString(context, 'item_entry__highlight_info'),
-        height: PsDimens.space120,
-        hintText: Utils.getString(context, 'item_entry__highlight_info'),
-        textAboutMe: true,
-        textEditingController: widget.userInputHighLightInformation,
-      ),
+      // PsTextFieldWidget(
+      //   titleText: Utils.getString(context, 'item_entry__highlight_info'),
+      //   height: PsDimens.space120,
+      //   hintText: Utils.getString(context, 'item_entry__highlight_info'),
+      //   textAboutMe: true,
+      //   textEditingController: widget.userInputHighLightInformation,
+      // ),
       PsTextFieldWidget(
         titleText: Utils.getString(context, 'item_entry__description'),
         height: PsDimens.space120,
@@ -1129,67 +1147,68 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
         textEditingController: widget.userInputDescription,
         isStar: true,
       ),
-      Column(
-        children: <Widget>[
-          PsDropdownBaseWithControllerWidget(
-              title: Utils.getString(context, 'item_entry__deal_option'),
-              textEditingController: widget.dealOptionController,
-              isStar: true,
-              onTap: () async {
-                FocusScope.of(context).requestFocus(FocusNode());
-                final ItemEntryProvider provider =
-                    Provider.of<ItemEntryProvider>(context, listen: false);
+      // Column(
+      //   children: <Widget>[
+      //     PsDropdownBaseWithControllerWidget(
+      //         title: Utils.getString(context, 'item_entry__deal_option'),
+      //         textEditingController: widget.dealOptionController,
+      //         isStar: true,
+      //         onTap: () async {
+      //           FocusScope.of(context).requestFocus(FocusNode());
+      //           final ItemEntryProvider provider =
+      //               Provider.of<ItemEntryProvider>(context, listen: false);
 
-                final dynamic itemDealOptionResult = await Navigator.pushNamed(
-                    context, RoutePaths.itemDealOption);
+      //           final dynamic itemDealOptionResult = await Navigator.pushNamed(
+      //               context, RoutePaths.itemDealOption);
 
-                if (itemDealOptionResult != null &&
-                    itemDealOptionResult is DealOption) {
-                  provider.itemDealOptionId = itemDealOptionResult.id;
+      //           if (itemDealOptionResult != null &&
+      //               itemDealOptionResult is DealOption) {
+      //             provider.itemDealOptionId = itemDealOptionResult.id;
 
-                  setState(() {
-                    widget.dealOptionController.text =
-                        itemDealOptionResult.name;
-                  });
-                }
-              }),
-          Container(
-            width: double.infinity,
-            height: PsDimens.space44,
-            margin: const EdgeInsets.only(
-                left: PsDimens.space12,
-                right: PsDimens.space12,
-                bottom: PsDimens.space12),
-            decoration: BoxDecoration(
-              color:
-                  Utils.isLightMode(context) ? Colors.white60 : Colors.black54,
-              borderRadius: BorderRadius.circular(PsDimens.space4),
-              border: Border.all(
-                  color: Utils.isLightMode(context)
-                      ? Colors.grey[200]
-                      : Colors.black87),
-            ),
-            child: TextField(
-              keyboardType: TextInputType.text,
-              maxLines: null,
-              controller: widget.userInputDealOptionText,
-              style: Theme.of(context).textTheme.bodyText1,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(
-                  left: PsDimens.space12,
-                  bottom: PsDimens.space8,
-                ),
-                border: InputBorder.none,
-                hintText: Utils.getString(context, 'item_entry__remark'),
-                hintStyle: Theme.of(context)
-                    .textTheme
-                    .bodyText2
-                    .copyWith(color: PsColors.textPrimaryLightColor),
-              ),
-            ),
-          )
-        ],
-      ),
+      //             setState(() {
+      //               widget.dealOptionController.text =
+      //                   itemDealOptionResult.name;
+      //             });
+      //           }
+      //         }),
+      //     Container(
+      //       width: double.infinity,
+      //       height: PsDimens.space44,
+      //       margin: const EdgeInsets.only(
+      //           left: PsDimens.space12,
+      //           right: PsDimens.space12,
+      //           bottom: PsDimens.space12),
+      //       decoration: BoxDecoration(
+      //         color:
+      //             Utils.isLightMode(context) ? Colors.white60 : Colors.black54,
+      //         borderRadius: BorderRadius.circular(PsDimens.space4),
+      //         border: Border.all(
+      //             color: Utils.isLightMode(context)
+      //                 ? Colors.grey[200]
+      //                 : Colors.black87),
+      //       ),
+      //       child: TextField(
+      //         keyboardType: TextInputType.text,
+      //         maxLines: null,
+      //         controller: widget.userInputDealOptionText,
+      //         style: Theme.of(context).textTheme.bodyText1,
+      //         decoration: InputDecoration(
+      //           contentPadding: const EdgeInsets.only(
+      //             left: PsDimens.space12,
+      //             bottom: PsDimens.space8,
+      //           ),
+      //           border: InputBorder.none,
+      //           hintText: Utils.getString(context, 'item_entry__remark'),
+      //           hintStyle: Theme.of(context)
+      //               .textTheme
+      //               .bodyText2
+      //               .copyWith(color: PsColors.textPrimaryLightColor),
+      //         ),
+      //       ),
+      //     )
+      //   ],
+      // ),
+
       PsDropdownBaseWithControllerWidget(
           title: Utils.getString(context, 'item_entry__location'),
           // selectedText: provider.selectedItemLocation == ''
@@ -1267,16 +1286,17 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
           ),
         ),
       ),
-      PsTextFieldWidget(
-        titleText: Utils.getString(context, 'item_entry__latitude'),
-        textAboutMe: false,
-        textEditingController: widget.userInputLattitude,
-      ),
-      PsTextFieldWidget(
-        titleText: Utils.getString(context, 'item_entry__longitude'),
-        textAboutMe: false,
-        textEditingController: widget.userInputLongitude,
-      ),
+
+      // PsTextFieldWidget(
+      //   titleText: Utils.getString(context, 'item_entry__latitude'),
+      //   textAboutMe: false,
+      //   textEditingController: widget.userInputLattitude,
+      // ),
+      // PsTextFieldWidget(
+      //   titleText: Utils.getString(context, 'item_entry__longitude'),
+      //   textAboutMe: false,
+      //   textEditingController: widget.userInputLongitude,
+      // ),
       PsTextFieldWidget(
         titleText: Utils.getString(context, 'item_entry__address'),
         textAboutMe: false,
@@ -1617,7 +1637,8 @@ class PriceDropDownControllerWidget extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Text(
-                Utils.getString(context, 'item_entry__price'),
+                // Utils.getString(context, 'item_entry__price')
+                "Size",
                 style: Theme.of(context).textTheme.bodyText2,
               ),
               Text(' *',
