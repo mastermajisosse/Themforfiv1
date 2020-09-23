@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "5178293712",
+    "firebase_url": "https://dressy-61133.firebaseio.com",
+    "project_id": "dressy-61133",
+    "storage_bucket": "dressy-61133.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5178293712:android:dc391a7e5b1a6696854dd5",
+        "android_client_info": {
+          "package_name": "com.dz.dressy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "5178293712-cnn5dh3ls9q6hagkushc61belucjqca5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dz.dressy",
+            "certificate_hash": "c4db70b533c245620556451ae6150b6d0b4f1430"
+          }
+        },
+        {
+          "client_id": "5178293712-1r226jvb7ehhkh03jgkkeh5o9efa48cm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCblzFJsXlg7O-XuRQ-dLg1yvWo33LycbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "5178293712-1r226jvb7ehhkh03jgkkeh5o9efa48cm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
