@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -13,6 +14,7 @@ import 'package:flutterbuyandsell/constant/ps_constants.dart';
 import 'package:flutterbuyandsell/constant/ps_dimens.dart';
 import 'package:flutterbuyandsell/constant/route_paths.dart';
 import 'package:flutterbuyandsell/provider/about_us/about_us_provider.dart';
+import 'package:flutterbuyandsell/provider/gallery/gallery_provider.dart';
 import 'package:flutterbuyandsell/provider/history/history_provider.dart';
 import 'package:flutterbuyandsell/provider/product/favourite_item_provider.dart';
 import 'package:flutterbuyandsell/provider/product/mark_sold_out_item_provider.dart';
@@ -20,9 +22,12 @@ import 'package:flutterbuyandsell/provider/product/product_provider.dart';
 import 'package:flutterbuyandsell/provider/product/touch_count_provider.dart';
 import 'package:flutterbuyandsell/provider/user/user_provider.dart';
 import 'package:flutterbuyandsell/repository/about_us_repository.dart';
+import 'package:flutterbuyandsell/repository/gallery_repository.dart';
 import 'package:flutterbuyandsell/repository/history_repsitory.dart';
 import 'package:flutterbuyandsell/repository/product_repository.dart';
 import 'package:flutterbuyandsell/repository/user_repository.dart';
+import 'package:flutterbuyandsell/ui/common/base/ps_widget_with_appbar.dart';
+import 'package:flutterbuyandsell/ui/common/base/ps_widget_with_appbar_no_app_bar_title.dart';
 import 'package:flutterbuyandsell/ui/common/base/ps_widget_with_multi_provider.dart';
 import 'package:flutterbuyandsell/ui/common/dialog/confirm_dialog_view.dart';
 import 'package:flutterbuyandsell/ui/common/ps_back_button_with_circle_bg_widget.dart';
@@ -112,6 +117,8 @@ class _ProductDetailState extends State<ProductDetailView>
     markSoldOutItemHolder =
         MarkSoldOutItemParameterHolder().markSoldOutItemHolder();
     markSoldOutItemHolder.itemId = widget.product.id;
+    final GalleryRepository galleryRepo =
+        Provider.of<GalleryRepository>(context);
 
     return PsWidgetWithMultiProvider(
         child: MultiProvider(
@@ -223,23 +230,6 @@ class _ProductDetailState extends State<ProductDetailView>
                               ),
                             ],
                             backgroundColor: PsColors.mainColorWithBlack,
-                            //   flexibleSpace: FlexibleSpaceBar(
-                            //     background: Container(
-                            //       color: PsColors.backgroundColor,
-                            //       child: PsNetworkImage(
-                            //         photoKey: widget.heroTagImage, //'latest${widget.product.defaultPhoto.imgId}',
-                            //         defaultPhoto: widget.product.defaultPhoto,
-                            //         width: double.infinity,
-                            //         height: double.infinity,
-                            //         onTap: () {
-                            //           Navigator.pushNamed(context, RoutePaths.galleryGrid, arguments: widget.product);
-                            //         },
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                            // flexibleSpace: FlexibleSpaceBar(
-                            //   background:
                             flexibleSpace: FlexibleSpaceBar(
                               background: Container(
                                 color: PsColors.backgroundColor,
@@ -253,9 +243,9 @@ class _ProductDetailState extends State<ProductDetailView>
                                         const Duration(seconds: 5),
                                     onPageChanged: (int i,
                                         CarouselPageChangedReason reason) {
-                                      setState(() {
-                                        // _currentId = widget.blogList[i].id;
-                                      });
+                                      // setState(() {
+                                      //   // _currentId = widget.blogList[i].id;
+                                      // });
                                     },
                                   ),
                                   items: List.generate(
@@ -277,196 +267,165 @@ class _ProductDetailState extends State<ProductDetailView>
                                               blurRadius: PsDimens.space8),
                                         ],
                                       ),
-                                      child: Stack(
-                                        alignment: Alignment.bottomRight,
-                                        children: <Widget>[
-                                          PsNetworkImage(
-                                            photoKey: widget.heroTagImage,
-                                            defaultPhoto:
-                                                widget.product.defaultPhoto,
-                                            width: double.infinity,
-                                            height: double.infinity,
-                                            onTap: () {
-                                              Navigator.pushNamed(context,
-                                                  RoutePaths.galleryGrid,
-                                                  arguments: widget.product);
-                                            },
-                                          ),
-                                          if (provider.itemDetail.data
-                                                  .addedUserId ==
-                                              provider
-                                                  .psValueHolder.loginUserId)
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: PsDimens.space12,
-                                                  right: PsDimens.space12),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: <Widget>[
-                                                  if (provider.itemDetail.data
-                                                          .paidStatus ==
-                                                      PsConst.ADSPROGRESS)
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      PsDimens
-                                                                          .space4),
-                                                          color: PsColors
-                                                              .paidAdsColor),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              PsDimens.space12),
-                                                      child: Text(
-                                                        Utils.getString(context,
-                                                            'paid__ads_in_progress'),
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText2
-                                                            .copyWith(
-                                                                color: PsColors
-                                                                    .white),
-                                                      ),
-                                                    )
-                                                  else if (provider
-                                                              .itemDetail
-                                                              .data
-                                                              .paidStatus ==
-                                                          PsConst.ADSFINISHED &&
-                                                      provider.itemDetail.data
-                                                              .addedUserId ==
-                                                          provider.psValueHolder
-                                                              .loginUserId)
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      PsDimens
-                                                                          .space4),
-                                                          color:
-                                                              PsColors.black),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              PsDimens.space12),
-                                                      child: Text(
-                                                        Utils.getString(context,
-                                                            'paid__ads_in_completed'),
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText2
-                                                            .copyWith(
-                                                                color: PsColors
-                                                                    .white),
-                                                      ),
-                                                    )
-                                                  else if (provider.itemDetail
-                                                          .data.paidStatus ==
-                                                      PsConst.ADSNOTYETSTART)
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      PsDimens
-                                                                          .space4),
-                                                          color: Colors.yellow),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              PsDimens.space12),
-                                                      child: Text(
-                                                        Utils.getString(context,
-                                                            'paid__ads_is_not_yet_start'),
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText2
-                                                            .copyWith(
-                                                                color: PsColors
-                                                                    .white),
-                                                      ),
-                                                    )
-                                                  else
-                                                    Container(),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: <Widget>[
-                                                      if (provider.itemDetail
-                                                              .data.isSoldOut ==
-                                                          '1')
-                                                        Container(
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          PsDimens
-                                                                              .space4),
-                                                              color: PsColors
-                                                                  .mainColor),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .all(
-                                                                  PsDimens
-                                                                      .space12),
-                                                          child: Text(
-                                                            Utils.getString(
-                                                                context,
-                                                                'item_detail__sold'),
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyText2
-                                                                .copyWith(
-                                                                    color: PsColors
-                                                                        .white),
-                                                          ),
-                                                        )
-                                                      else
-                                                        InkWell(
-                                                          onTap: () {
-                                                            showDialog<dynamic>(
-                                                                context:
-                                                                    context,
-                                                                builder:
-                                                                    (BuildContext
-                                                                        context) {
-                                                                  return ConfirmDialogView(
-                                                                      description: Utils.getString(
-                                                                          context,
-                                                                          'item_detail__sold_out_item'),
-                                                                      leftButtonText: Utils.getString(
-                                                                          context,
-                                                                          'item_detail__sold_out_dialog_cancel_button'),
-                                                                      rightButtonText: Utils.getString(
-                                                                          context,
-                                                                          'item_detail__sold_out_dialog_ok_button'),
-                                                                      onAgreeTap:
-                                                                          () async {
-                                                                        await markSoldOutItemProvider.loadmarkSoldOutItem(
-                                                                            psValueHolder.loginUserId,
-                                                                            markSoldOutItemHolder);
-                                                                        if (markSoldOutItemProvider.markSoldOutItem !=
-                                                                                null &&
-                                                                            markSoldOutItemProvider.markSoldOutItem.data !=
-                                                                                null) {
-                                                                          setState(
-                                                                              () {
-                                                                            provider.itemDetail.data.isSoldOut =
-                                                                                markSoldOutItemProvider.markSoldOutItem.data.isSoldOut;
-                                                                          });
-                                                                        }
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      });
-                                                                });
-                                                          },
-                                                          child: Container(
+                                      child: PsWidgetWithAppBarNoAppBarTitle<
+                                          GalleryProvider>(initProvider: () {
+                                        return GalleryProvider(
+                                            repo: galleryRepo);
+                                      }, onProviderReady:
+                                          (GalleryProvider provider2) {
+                                        provider2.loadImageList(
+                                            widget.product.defaultPhoto
+                                                .imgParentId,
+                                            PsConst.ITEM_TYPE);
+                                      }, builder: (BuildContext context,
+                                          GalleryProvider provider2,
+                                          Widget child) {
+                                        return Stack(
+                                          alignment: Alignment.bottomRight,
+                                          children: <Widget>[
+                                            provider2.isLoading
+                                                ? Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  )
+                                                : PsNetworkImageWithUrl(
+                                                    photoKey: '',
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                    imagePath: provider2
+                                                        .galleryList
+                                                        .data[index]
+                                                        .imgPath,
+                                                    // onTap: widget.onImageTap,
+                                                    boxfit: BoxFit.cover,
+                                                  ),
+                                            if (provider.itemDetail.data
+                                                    .addedUserId ==
+                                                provider
+                                                    .psValueHolder.loginUserId)
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: PsDimens.space12,
+                                                    right: PsDimens.space12),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: <Widget>[
+                                                    if (provider.itemDetail.data
+                                                            .paidStatus ==
+                                                        PsConst.ADSPROGRESS)
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        PsDimens
+                                                                            .space4),
+                                                            color: PsColors
+                                                                .paidAdsColor),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .all(
+                                                                PsDimens
+                                                                    .space12),
+                                                        child: Text(
+                                                          Utils.getString(
+                                                              context,
+                                                              'paid__ads_in_progress'),
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .bodyText2
+                                                              .copyWith(
+                                                                  color: PsColors
+                                                                      .white),
+                                                        ),
+                                                      )
+                                                    else if (provider
+                                                                .itemDetail
+                                                                .data
+                                                                .paidStatus ==
+                                                            PsConst
+                                                                .ADSFINISHED &&
+                                                        provider.itemDetail.data
+                                                                .addedUserId ==
+                                                            provider
+                                                                .psValueHolder
+                                                                .loginUserId)
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        PsDimens
+                                                                            .space4),
+                                                            color:
+                                                                PsColors.black),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .all(
+                                                                PsDimens
+                                                                    .space12),
+                                                        child: Text(
+                                                          Utils.getString(
+                                                              context,
+                                                              'paid__ads_in_completed'),
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .bodyText2
+                                                              .copyWith(
+                                                                  color: PsColors
+                                                                      .white),
+                                                        ),
+                                                      )
+                                                    else if (provider.itemDetail
+                                                            .data.paidStatus ==
+                                                        PsConst.ADSNOTYETSTART)
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        PsDimens
+                                                                            .space4),
+                                                            color:
+                                                                Colors.yellow),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .all(
+                                                                PsDimens
+                                                                    .space12),
+                                                        child: Text(
+                                                          Utils.getString(
+                                                              context,
+                                                              'paid__ads_is_not_yet_start'),
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .bodyText2
+                                                              .copyWith(
+                                                                  color: PsColors
+                                                                      .white),
+                                                        ),
+                                                      )
+                                                    else
+                                                      Container(),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: <Widget>[
+                                                        if (provider
+                                                                .itemDetail
+                                                                .data
+                                                                .isSoldOut ==
+                                                            '1')
+                                                          Container(
                                                             decoration: BoxDecoration(
                                                                 borderRadius:
                                                                     BorderRadius.circular(
@@ -482,7 +441,7 @@ class _ProductDetailState extends State<ProductDetailView>
                                                             child: Text(
                                                               Utils.getString(
                                                                   context,
-                                                                  'item_detail__mark_sold'),
+                                                                  'item_detail__sold'),
                                                               style: Theme.of(
                                                                       context)
                                                                   .textTheme
@@ -491,45 +450,60 @@ class _ProductDetailState extends State<ProductDetailView>
                                                                       color: PsColors
                                                                           .white),
                                                             ),
-                                                          ),
-                                                        ),
-                                                      InkWell(
-                                                        child: Container(
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
+                                                          )
+                                                        else
+                                                          InkWell(
+                                                            onTap: () {
+                                                              showDialog<
+                                                                      dynamic>(
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return ConfirmDialogView(
+                                                                        description: Utils.getString(
+                                                                            context,
+                                                                            'item_detail__sold_out_item'),
+                                                                        leftButtonText: Utils.getString(
+                                                                            context,
+                                                                            'item_detail__sold_out_dialog_cancel_button'),
+                                                                        rightButtonText: Utils.getString(
+                                                                            context,
+                                                                            'item_detail__sold_out_dialog_ok_button'),
+                                                                        onAgreeTap:
+                                                                            () async {
+                                                                          await markSoldOutItemProvider.loadmarkSoldOutItem(
+                                                                              psValueHolder.loginUserId,
+                                                                              markSoldOutItemHolder);
+                                                                          if (markSoldOutItemProvider.markSoldOutItem != null &&
+                                                                              markSoldOutItemProvider.markSoldOutItem.data != null) {
+                                                                            setState(() {
+                                                                              provider.itemDetail.data.isSoldOut = markSoldOutItemProvider.markSoldOutItem.data.isSoldOut;
+                                                                            });
+                                                                          }
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        });
+                                                                  });
+                                                            },
+                                                            child: Container(
+                                                              decoration: BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
                                                                           PsDimens
                                                                               .space4),
-                                                              color: Colors
-                                                                  .black45),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .all(
-                                                                  PsDimens
-                                                                      .space12),
-                                                          child: Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .end,
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            children: <Widget>[
-                                                              Icon(
-                                                                Ionicons
-                                                                    .md_images,
-                                                                color: PsColors
-                                                                    .white,
-                                                              ),
-                                                              const SizedBox(
-                                                                  width: PsDimens
-                                                                      .space12),
-                                                              Text(
-                                                                '${widget.product.photoCount}  ${Utils.getString(context, 'item_detail__photo')}',
+                                                                  color: PsColors
+                                                                      .mainColor),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .all(
+                                                                      PsDimens
+                                                                          .space12),
+                                                              child: Text(
+                                                                Utils.getString(
+                                                                    context,
+                                                                    'item_detail__mark_sold'),
                                                                 style: Theme.of(
                                                                         context)
                                                                     .textTheme
@@ -538,574 +512,193 @@ class _ProductDetailState extends State<ProductDetailView>
                                                                         color: PsColors
                                                                             .white),
                                                               ),
-                                                            ],
+                                                            ),
                                                           ),
+                                                        InkWell(
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                        PsDimens
+                                                                            .space4),
+                                                                color: Colors
+                                                                    .black45),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .all(
+                                                                    PsDimens
+                                                                        .space12),
+                                                            child: Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .end,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: <
+                                                                  Widget>[
+                                                                Icon(
+                                                                  Ionicons
+                                                                      .md_images,
+                                                                  color: PsColors
+                                                                      .white,
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: PsDimens
+                                                                        .space12),
+                                                                Text(
+                                                                  '${widget.product.photoCount}  ${Utils.getString(context, 'item_detail__photo')}',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyText2
+                                                                      .copyWith(
+                                                                          color:
+                                                                              PsColors.white),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          onTap: () {
+                                                            Navigator.pushNamed(
+                                                                context,
+                                                                RoutePaths
+                                                                    .galleryGrid,
+                                                                arguments: widget
+                                                                    .product);
+                                                          },
                                                         ),
-                                                        onTap: () {
-                                                          Navigator.pushNamed(
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            else
+                                              Padding(
+                                                padding: const EdgeInsets.all(
+                                                    PsDimens.space8),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: <Widget>[
+                                                    if (provider.itemDetail.data
+                                                            .paidStatus ==
+                                                        PsConst.ADSPROGRESS)
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        PsDimens
+                                                                            .space4),
+                                                            color: PsColors
+                                                                .paidAdsColor),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .all(
+                                                                PsDimens
+                                                                    .space12),
+                                                        child: Text(
+                                                          Utils.getString(
                                                               context,
-                                                              RoutePaths
-                                                                  .galleryGrid,
-                                                              arguments: widget
-                                                                  .product);
-                                                        },
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          else
-                                            Padding(
-                                              padding: const EdgeInsets.all(
-                                                  PsDimens.space8),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: <Widget>[
-                                                  if (provider.itemDetail.data
-                                                          .paidStatus ==
-                                                      PsConst.ADSPROGRESS)
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      PsDimens
-                                                                          .space4),
-                                                          color: PsColors
-                                                              .paidAdsColor),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              PsDimens.space12),
-                                                      child: Text(
-                                                        Utils.getString(context,
-                                                            'paid__ads_in_progress'),
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText2
-                                                            .copyWith(
-                                                                color: PsColors
-                                                                    .white),
-                                                      ),
-                                                    )
-                                                  else if (provider
-                                                              .itemDetail
-                                                              .data
-                                                              .paidStatus ==
-                                                          PsConst.ADSFINISHED &&
-                                                      provider.itemDetail.data
-                                                              .addedUserId ==
-                                                          provider.psValueHolder
-                                                              .loginUserId)
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      PsDimens
-                                                                          .space4),
-                                                          color:
-                                                              PsColors.black),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              PsDimens.space12),
-                                                      child: Text(
-                                                        Utils.getString(context,
-                                                            'paid__ads_in_completed'),
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText2
-                                                            .copyWith(
-                                                                color: PsColors
-                                                                    .white),
-                                                      ),
-                                                    )
-                                                  else if (provider.itemDetail
-                                                          .data.paidStatus ==
-                                                      PsConst.ADSNOTYETSTART)
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      PsDimens
-                                                                          .space4),
-                                                          color: Colors.yellow),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              PsDimens.space12),
-                                                      child: Text(
-                                                        Utils.getString(context,
-                                                            'paid__ads_is_not_yet_start'),
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText2
-                                                            .copyWith(
-                                                                color: PsColors
-                                                                    .white),
-                                                      ),
-                                                    )
-                                                  else
-                                                    Container(),
-                                                  // InkWell(
-                                                  //   child: Container(
-                                                  //     decoration: BoxDecoration(
-                                                  //         borderRadius:
-                                                  //             BorderRadius
-                                                  //                 .circular(
-                                                  //                     PsDimens
-                                                  //                         .space4),
-                                                  //         color:
-                                                  //             Colors.black45),
-                                                  //     padding:
-                                                  //         const EdgeInsets.all(
-                                                  //             PsDimens.space12),
-                                                  //     child: Row(
-                                                  //       crossAxisAlignment:
-                                                  //           CrossAxisAlignment
-                                                  //               .end,
-                                                  //       mainAxisAlignment:
-                                                  //           MainAxisAlignment
-                                                  //               .end,
-                                                  //       mainAxisSize:
-                                                  //           MainAxisSize.min,
-                                                  //       children: <Widget>[
-                                                  //         Icon(
-                                                  //           Ionicons.md_images,
-                                                  //           color:
-                                                  //               PsColors.white,
-                                                  //         ),
-                                                  //         const SizedBox(
-                                                  //             width: PsDimens
-                                                  //                 .space12),
-                                                  //         Text(
-                                                  //           '${widget.product.photoCount}  ${Utils.getString(context, 'item_detail__photo')}',
-                                                  //           style: Theme.of(
-                                                  //                   context)
-                                                  //               .textTheme
-                                                  //               .bodyText2
-                                                  //               .copyWith(
-                                                  //                   color: PsColors
-                                                  //                       .white),
-                                                  //         ),
-                                                  //       ],
-                                                  //     ),
-                                                  //   ),
-                                                  //   onTap: () {
-                                                  //     Navigator.pushNamed(
-                                                  //         context,
-                                                  //         RoutePaths
-                                                  //             .galleryGrid,
-                                                  //         arguments:
-                                                  //             widget.product);
-                                                  //   },
-                                                  // ),
-                                                ],
-                                              ),
-                                            )
-                                        ],
-                                      ),
+                                                              'paid__ads_in_progress'),
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .bodyText2
+                                                              .copyWith(
+                                                                  color: PsColors
+                                                                      .white),
+                                                        ),
+                                                      )
+                                                    else if (provider
+                                                                .itemDetail
+                                                                .data
+                                                                .paidStatus ==
+                                                            PsConst
+                                                                .ADSFINISHED &&
+                                                        provider.itemDetail.data
+                                                                .addedUserId ==
+                                                            provider
+                                                                .psValueHolder
+                                                                .loginUserId)
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        PsDimens
+                                                                            .space4),
+                                                            color:
+                                                                PsColors.black),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .all(
+                                                                PsDimens
+                                                                    .space12),
+                                                        child: Text(
+                                                          Utils.getString(
+                                                              context,
+                                                              'paid__ads_in_completed'),
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .bodyText2
+                                                              .copyWith(
+                                                                  color: PsColors
+                                                                      .white),
+                                                        ),
+                                                      )
+                                                    else if (provider.itemDetail
+                                                            .data.paidStatus ==
+                                                        PsConst.ADSNOTYETSTART)
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        PsDimens
+                                                                            .space4),
+                                                            color:
+                                                                Colors.yellow),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .all(
+                                                                PsDimens
+                                                                    .space12),
+                                                        child: Text(
+                                                          Utils.getString(
+                                                              context,
+                                                              'paid__ads_is_not_yet_start'),
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .bodyText2
+                                                              .copyWith(
+                                                                  color: PsColors
+                                                                      .white),
+                                                        ),
+                                                      )
+                                                    else
+                                                      Container(),
+                                                  ],
+                                                ),
+                                              )
+                                          ],
+                                        );
+                                      }),
                                     );
-                                  }), //.toList(),
+                                  }),
                                 ),
                               ),
                             ),
                           ),
-                          // Container(
-                          //   color: PsColors.backgroundColor,
-                          //   child: Stack(
-                          //     alignment: Alignment.bottomRight,
-                          //     children: <Widget>[
-                          //       // PsNetworkImage(
-                          //       //   photoKey: widget.heroTagImage,
-                          //       //   defaultPhoto: widget.product.defaultPhoto,
-                          //       //   width: double.infinity,
-                          //       //   height: double.infinity,
-                          //       //   onTap: () {
-                          //       //     Navigator.pushNamed(
-                          //       //         context, RoutePaths.galleryGrid,
-                          //       //         arguments: widget.product);
-                          //       //   },
-                          //       // ),
-                          //       if (provider.itemDetail.data.addedUserId ==
-                          //           provider.psValueHolder.loginUserId)
-                          //         Container(
-                          //           margin: const EdgeInsets.only(
-                          //               left: PsDimens.space12,
-                          //               right: PsDimens.space12),
-                          //           child: Column(
-                          //             crossAxisAlignment:
-                          //                 CrossAxisAlignment.start,
-                          //             mainAxisAlignment:
-                          //                 MainAxisAlignment.end,
-                          //             mainAxisSize: MainAxisSize.max,
-                          //             children: <Widget>[
-                          //               if (provider.itemDetail.data
-                          //                       .paidStatus ==
-                          //                   PsConst.ADSPROGRESS)
-                          //                 Container(
-                          //                   decoration: BoxDecoration(
-                          //                       borderRadius:
-                          //                           BorderRadius.circular(
-                          //                               PsDimens.space4),
-                          //                       color:
-                          //                           PsColors.paidAdsColor),
-                          //                   padding: const EdgeInsets.all(
-                          //                       PsDimens.space12),
-                          //                   child: Text(
-                          //                     Utils.getString(context,
-                          //                         'paid__ads_in_progress'),
-                          //                     style: Theme.of(context)
-                          //                         .textTheme
-                          //                         .bodyText2
-                          //                         .copyWith(
-                          //                             color:
-                          //                                 PsColors.white),
-                          //                   ),
-                          //                 )
-                          //               else if (provider.itemDetail.data
-                          //                           .paidStatus ==
-                          //                       PsConst.ADSFINISHED &&
-                          //                   provider.itemDetail.data
-                          //                           .addedUserId ==
-                          //                       provider.psValueHolder
-                          //                           .loginUserId)
-                          //                 Container(
-                          //                   decoration: BoxDecoration(
-                          //                       borderRadius:
-                          //                           BorderRadius.circular(
-                          //                               PsDimens.space4),
-                          //                       color: PsColors.black),
-                          //                   padding: const EdgeInsets.all(
-                          //                       PsDimens.space12),
-                          //                   child: Text(
-                          //                     Utils.getString(context,
-                          //                         'paid__ads_in_completed'),
-                          //                     style: Theme.of(context)
-                          //                         .textTheme
-                          //                         .bodyText2
-                          //                         .copyWith(
-                          //                             color:
-                          //                                 PsColors.white),
-                          //                   ),
-                          //                 )
-                          //               else if (provider.itemDetail.data
-                          //                       .paidStatus ==
-                          //                   PsConst.ADSNOTYETSTART)
-                          //                 Container(
-                          //                   decoration: BoxDecoration(
-                          //                       borderRadius:
-                          //                           BorderRadius.circular(
-                          //                               PsDimens.space4),
-                          //                       color: Colors.yellow),
-                          //                   padding: const EdgeInsets.all(
-                          //                       PsDimens.space12),
-                          //                   child: Text(
-                          //                     Utils.getString(context,
-                          //                         'paid__ads_is_not_yet_start'),
-                          //                     style: Theme.of(context)
-                          //                         .textTheme
-                          //                         .bodyText2
-                          //                         .copyWith(
-                          //                             color:
-                          //                                 PsColors.white),
-                          //                   ),
-                          //                 )
-                          //               else
-                          //                 Container(),
-                          //               Row(
-                          //                 mainAxisAlignment:
-                          //                     MainAxisAlignment
-                          //                         .spaceBetween,
-                          //                 children: <Widget>[
-                          //                   if (provider.itemDetail.data
-                          //                           .isSoldOut ==
-                          //                       '1')
-                          //                     Container(
-                          //                       decoration: BoxDecoration(
-                          //                           borderRadius:
-                          //                               BorderRadius
-                          //                                   .circular(
-                          //                                       PsDimens
-                          //                                           .space4),
-                          //                           color:
-                          //                               PsColors.mainColor),
-                          //                       padding:
-                          //                           const EdgeInsets.all(
-                          //                               PsDimens.space12),
-                          //                       child: Text(
-                          //                         Utils.getString(context,
-                          //                             'item_detail__sold'),
-                          //                         style: Theme.of(context)
-                          //                             .textTheme
-                          //                             .bodyText2
-                          //                             .copyWith(
-                          //                                 color: PsColors
-                          //                                     .white),
-                          //                       ),
-                          //                     )
-                          //                   else
-                          //                     InkWell(
-                          //                       onTap: () {
-                          //                         showDialog<dynamic>(
-                          //                             context: context,
-                          //                             builder: (BuildContext
-                          //                                 context) {
-                          //                               return ConfirmDialogView(
-                          //                                   description: Utils
-                          //                                       .getString(
-                          //                                           context,
-                          //                                           'item_detail__sold_out_item'),
-                          //                                   leftButtonText:
-                          //                                       Utils.getString(
-                          //                                           context,
-                          //                                           'item_detail__sold_out_dialog_cancel_button'),
-                          //                                   rightButtonText:
-                          //                                       Utils.getString(
-                          //                                           context,
-                          //                                           'item_detail__sold_out_dialog_ok_button'),
-                          //                                   onAgreeTap:
-                          //                                       () async {
-                          //                                     await markSoldOutItemProvider.loadmarkSoldOutItem(
-                          //                                         psValueHolder
-                          //                                             .loginUserId,
-                          //                                         markSoldOutItemHolder);
-                          //                                     if (markSoldOutItemProvider
-                          //                                                 .markSoldOutItem !=
-                          //                                             null &&
-                          //                                         markSoldOutItemProvider
-                          //                                                 .markSoldOutItem
-                          //                                                 .data !=
-                          //                                             null) {
-                          //                                       setState(
-                          //                                           () {
-                          //                                         provider.itemDetail.data.isSoldOut = markSoldOutItemProvider
-                          //                                             .markSoldOutItem
-                          //                                             .data
-                          //                                             .isSoldOut;
-                          //                                       });
-                          //                                     }
-                          //                                     Navigator.of(
-                          //                                             context)
-                          //                                         .pop();
-                          //                                   });
-                          //                             });
-                          //                       },
-                          //                       child: Container(
-                          //                         decoration: BoxDecoration(
-                          //                             borderRadius:
-                          //                                 BorderRadius
-                          //                                     .circular(
-                          //                                         PsDimens
-                          //                                             .space4),
-                          //                             color: PsColors
-                          //                                 .mainColor),
-                          //                         padding:
-                          //                             const EdgeInsets.all(
-                          //                                 PsDimens.space12),
-                          //                         child: Text(
-                          //                           Utils.getString(context,
-                          //                               'item_detail__mark_sold'),
-                          //                           style: Theme.of(context)
-                          //                               .textTheme
-                          //                               .bodyText2
-                          //                               .copyWith(
-                          //                                   color: PsColors
-                          //                                       .white),
-                          //                         ),
-                          //                       ),
-                          //                     ),
-                          //                   InkWell(
-                          //                     child: Container(
-                          //                       decoration: BoxDecoration(
-                          //                           borderRadius:
-                          //                               BorderRadius
-                          //                                   .circular(
-                          //                                       PsDimens
-                          //                                           .space4),
-                          //                           color: Colors.black45),
-                          //                       padding:
-                          //                           const EdgeInsets.all(
-                          //                               PsDimens.space12),
-                          //                       child: Row(
-                          //                         crossAxisAlignment:
-                          //                             CrossAxisAlignment
-                          //                                 .end,
-                          //                         mainAxisAlignment:
-                          //                             MainAxisAlignment.end,
-                          //                         mainAxisSize:
-                          //                             MainAxisSize.min,
-                          //                         children: <Widget>[
-                          //                           Icon(
-                          //                             Ionicons.md_images,
-                          //                             color: PsColors.white,
-                          //                           ),
-                          //                           const SizedBox(
-                          //                               width: PsDimens
-                          //                                   .space12),
-                          //                           Text(
-                          //                             '${widget.product.photoCount}  ${Utils.getString(context, 'item_detail__photo')}',
-                          //                             style: Theme.of(
-                          //                                     context)
-                          //                                 .textTheme
-                          //                                 .bodyText2
-                          //                                 .copyWith(
-                          //                                     color: PsColors
-                          //                                         .white),
-                          //                           ),
-                          //                         ],
-                          //                       ),
-                          //                     ),
-                          //                     onTap: () {
-                          //                       Navigator.pushNamed(context,
-                          //                           RoutePaths.galleryGrid,
-                          //                           arguments:
-                          //                               widget.product);
-                          //                     },
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //             ],
-                          //           ),
-                          //         )
-                          //       else
-                          //         Padding(
-                          //           padding: const EdgeInsets.all(
-                          //               PsDimens.space8),
-                          //           child: Row(
-                          //             mainAxisAlignment:
-                          //                 MainAxisAlignment.spaceBetween,
-                          //             crossAxisAlignment:
-                          //                 CrossAxisAlignment.end,
-                          //             children: <Widget>[
-                          //               if (provider.itemDetail.data
-                          //                       .paidStatus ==
-                          //                   PsConst.ADSPROGRESS)
-                          //                 Container(
-                          //                   decoration: BoxDecoration(
-                          //                       borderRadius:
-                          //                           BorderRadius.circular(
-                          //                               PsDimens.space4),
-                          //                       color:
-                          //                           PsColors.paidAdsColor),
-                          //                   padding: const EdgeInsets.all(
-                          //                       PsDimens.space12),
-                          //                   child: Text(
-                          //                     Utils.getString(context,
-                          //                         'paid__ads_in_progress'),
-                          //                     style: Theme.of(context)
-                          //                         .textTheme
-                          //                         .bodyText2
-                          //                         .copyWith(
-                          //                             color:
-                          //                                 PsColors.white),
-                          //                   ),
-                          //                 )
-                          //               else if (provider.itemDetail.data
-                          //                           .paidStatus ==
-                          //                       PsConst.ADSFINISHED &&
-                          //                   provider.itemDetail.data
-                          //                           .addedUserId ==
-                          //                       provider.psValueHolder
-                          //                           .loginUserId)
-                          //                 Container(
-                          //                   decoration: BoxDecoration(
-                          //                       borderRadius:
-                          //                           BorderRadius.circular(
-                          //                               PsDimens.space4),
-                          //                       color: PsColors.black),
-                          //                   padding: const EdgeInsets.all(
-                          //                       PsDimens.space12),
-                          //                   child: Text(
-                          //                     Utils.getString(context,
-                          //                         'paid__ads_in_completed'),
-                          //                     style: Theme.of(context)
-                          //                         .textTheme
-                          //                         .bodyText2
-                          //                         .copyWith(
-                          //                             color:
-                          //                                 PsColors.white),
-                          //                   ),
-                          //                 )
-                          //               else if (provider.itemDetail.data
-                          //                       .paidStatus ==
-                          //                   PsConst.ADSNOTYETSTART)
-                          //                 Container(
-                          //                   decoration: BoxDecoration(
-                          //                       borderRadius:
-                          //                           BorderRadius.circular(
-                          //                               PsDimens.space4),
-                          //                       color: Colors.yellow),
-                          //                   padding: const EdgeInsets.all(
-                          //                       PsDimens.space12),
-                          //                   child: Text(
-                          //                     Utils.getString(context,
-                          //                         'paid__ads_is_not_yet_start'),
-                          //                     style: Theme.of(context)
-                          //                         .textTheme
-                          //                         .bodyText2
-                          //                         .copyWith(
-                          //                             color:
-                          //                                 PsColors.white),
-                          //                   ),
-                          //                 )
-                          //               else
-                          //                 Container(),
-                          //               InkWell(
-                          //                 child: Container(
-                          //                   decoration: BoxDecoration(
-                          //                       borderRadius:
-                          //                           BorderRadius.circular(
-                          //                               PsDimens.space4),
-                          //                       color: Colors.black45),
-                          //                   padding: const EdgeInsets.all(
-                          //                       PsDimens.space12),
-                          //                   child: Row(
-                          //                     crossAxisAlignment:
-                          //                         CrossAxisAlignment.end,
-                          //                     mainAxisAlignment:
-                          //                         MainAxisAlignment.end,
-                          //                     mainAxisSize:
-                          //                         MainAxisSize.min,
-                          //                     children: <Widget>[
-                          //                       Icon(
-                          //                         Ionicons.md_images,
-                          //                         color: PsColors.white,
-                          //                       ),
-                          //                       const SizedBox(
-                          //                           width:
-                          //                               PsDimens.space12),
-                          //                       Text(
-                          //                         '${widget.product.photoCount}  ${Utils.getString(context, 'item_detail__photo')}',
-                          //                         style: Theme.of(context)
-                          //                             .textTheme
-                          //                             .bodyText2
-                          //                             .copyWith(
-                          //                                 color: PsColors
-                          //                                     .white),
-                          //                       ),
-                          //                     ],
-                          //                   ),
-                          //                 ),
-                          //                 onTap: () {
-                          //                   Navigator.pushNamed(context,
-                          //                       RoutePaths.galleryGrid,
-                          //                       arguments: widget.product);
-                          //                 },
-                          //               ),
-                          //             ],
-                          //           ),
-                          //         )
-                          //     ],
-                          //   ),
-                          // ),
-
-                          // ),
-                          // ),
                           SliverList(
                             delegate: SliverChildListDelegate(<Widget>[
                               Container(
@@ -1137,11 +730,6 @@ class _ProductDetailState extends State<ProductDetailView>
                                   SafetyTipsTileView(
                                       animationController: animationController),
                                   LocationTileView(item: widget.product),
-                                  // GettingThisTileView(
-                                  //     detailOption:
-                                  //         provider.itemDetail.data.dealOption,
-                                  //     address:
-                                  //         provider.itemDetail.data.address),
                                   StatisticTileView(
                                     provider,
                                   ),
@@ -1314,17 +902,6 @@ class __HeaderBoxWidgetState extends State<_HeaderBoxWidget> {
                 title: '${widget.itemDetail.itemDetail.data.addedDateStr}',
                 color: PsColors.grey,
                 itemProvider: widget.itemDetail),
-            // if (widget.itemDetail.itemDetail.data.itemPriceType.name != '')
-            //   _IconsAndTowTitleWithColumnTextWidget(
-            //     icon: AntDesign.tago,
-            //     title: widget.itemDetail.itemDetail.data.price != ''
-            //         ? '${widget.itemDetail.itemDetail.data.itemCurrency.currencySymbol} ${Utils.getPriceFormat(widget.itemDetail.itemDetail.data.price)}'
-            //         : '',
-            //     subTitle:
-            //         '(${widget.itemDetail.itemDetail.data.itemPriceType.name})',
-            //     color: PsColors.mainColor,
-            //   )
-            // else
             _IconsAndTitleTextWidget(
               icon: AntDesign.tago,
               title: widget.itemDetail.itemDetail.data.price != ''
@@ -1332,20 +909,10 @@ class __HeaderBoxWidgetState extends State<_HeaderBoxWidget> {
                   : '',
               color: PsColors.mainColor,
             ),
-            // _IconsAndTitleTextWidget(
-            //     icon: Icons.favorite_border,
-            //     title:
-            //         '${widget.itemDetail.itemDetail.data.favouriteCount} ${Utils.getString(context, 'item_detail__like_count')}',
-            //     color: PsColors.mainColor),
             _IconsAndTitleTextWidget(
                 icon: SimpleLineIcons.drawer,
                 title: widget.itemDetail.itemDetail.data.conditionOfItem.name,
                 color: null),
-            // _IconsAndTitleTextWidget(
-            //     icon: MaterialCommunityIcons.view_dashboard_outline,
-            //     title:
-            //         '${widget.itemDetail.itemDetail.data.category.catName} / ${widget.itemDetail.itemDetail.data.subCategory.name}',
-            //     color: null),
             _IconsAndTitleTextWidget(
                 icon: MaterialCommunityIcons.arrow_left_right_bold_outline,
                 title: '${widget.itemDetail.itemDetail.data.itemType.name}',
@@ -1356,34 +923,6 @@ class __HeaderBoxWidgetState extends State<_HeaderBoxWidget> {
                     ? Utils.getString(context, 'item_detail__item_cannot_order')
                     : Utils.getString(context, 'item_detail__item_can_order'),
                 color: null),
-            // _IconsAndTitleTextWidget(
-            //     icon: Octicons.info,
-            //     title: widget.itemDetail.itemDetail.data.description,
-            //     color: null),
-            // if (widget.itemDetail.itemDetail.data.highlightInformation != '')
-            //   Container(
-            //     margin: const EdgeInsets.only(
-            //         left: PsDimens.space20,
-            //         right: PsDimens.space20,
-            //         bottom: PsDimens.space8),
-            //     child: Card(
-            //       elevation: 0.0,
-            //       shape: const BeveledRectangleBorder(
-            //         borderRadius:
-            //             BorderRadius.all(Radius.circular(PsDimens.space8)),
-            //       ),
-            //       color: PsColors.baseLightColor,
-            //       child: Padding(
-            //         padding: const EdgeInsets.all(12.0),
-            //         child: Text(
-            //           widget.itemDetail.itemDetail.data.highlightInformation,
-            //           style: Theme.of(context).textTheme.bodyText2.copyWith(
-            //               letterSpacing: 0.8, fontSize: 16, height: 1.3),
-            //         ),
-            //       ),
-            //     ),
-            //   )
-            // else
             Container(),
             if (widget.itemDetail.itemDetail.data.description != '')
               _DescriptionWedget(
@@ -1676,49 +1215,11 @@ class __CallAndChatButtonWidgetState extends State<_CallAndChatButtonWidget> {
                         const SizedBox(
                           width: PsDimens.space10,
                         ),
-                        // if (widget.provider.itemDetail.data.user.userPhone !=
-                        //         null &&
-                        //     widget.provider.itemDetail.data.user.userPhone !=
-                        //         '')
-                        //   PSButtonWithIconWidget(
-                        //     hasShadow: true,
-                        //     icon: Icons.call,
-                        //     width: 100,
-                        //     titleText:
-                        //         Utils.getString(context, 'item_detail__call'),
-                        //     onPressed: () async {
-                        //       if (await canLaunch(
-                        //           'tel://${widget.provider.itemDetail.data.user.userPhone}')) {
-                        //         await launch(
-                        //             'tel://${widget.provider.itemDetail.data.user.userPhone}');
-                        //       } else {
-                        //         throw 'Could not Call Phone';
-                        //       }
-                        //     },
-                        //   )
-                        // else
-                        Container(),
                         const SizedBox(
                           width: PsDimens.space10,
                         ),
                         Expanded(
-                          child:
-                              // RaisedButton(
-                              //   child: Text(
-                              //     Utils.getString(context, 'item_detail__chat'),
-                              //     overflow: TextOverflow.ellipsis,
-                              //     maxLines: 1,
-                              //     textAlign: TextAlign.center,
-                              //     softWrap: false,
-                              //   ),
-                              //   color: PsColors.mainColor,
-                              //   shape: const BeveledRectangleBorder(
-                              //       borderRadius: BorderRadius.all(
-                              //     Radius.circular(PsDimens.space8),
-                              //   )),
-                              //   textColor: Theme.of(context).textTheme.button.copyWith(color: PsColors.white).color,
-                              //   onPressed: () {
-                              PSButtonWithIconWidget(
+                          child: PSButtonWithIconWidget(
                             hasShadow: true,
                             icon: Icons.chat,
                             width: double.infinity,
@@ -1804,22 +1305,7 @@ class _EditAndDeleteButtonWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Expanded(
-                        child:
-                            // RaisedButton(
-                            //   child: Text(
-                            //     Utils.getString(context, 'item_detail__delete'),
-                            //     overflow: TextOverflow.ellipsis,
-                            //     maxLines: 1,
-                            //     softWrap: false,
-                            //   ),
-                            //   color: PsColors.grey,
-                            //   shape: const BeveledRectangleBorder(
-                            //       borderRadius: BorderRadius.all(
-                            //     Radius.circular(PsDimens.space8),
-                            //   )),
-                            //   textColor: Theme.of(context).textTheme.button.copyWith(color: PsColors.white).color,
-                            //   onPressed: () async {
-                            PSButtonWithIconWidget(
+                        child: PSButtonWithIconWidget(
                           hasShadow: true,
                           width: double.infinity,
                           icon: Icons.delete,
@@ -1880,23 +1366,7 @@ class _EditAndDeleteButtonWidget extends StatelessWidget {
                         width: PsDimens.space10,
                       ),
                       Expanded(
-                        child:
-                            //  RaisedButton(
-                            //   child: Text(
-                            //     Utils.getString(context, 'item_detail__edit'),
-                            //     overflow: TextOverflow.ellipsis,
-                            //     maxLines: 1,
-                            //     textAlign: TextAlign.center,
-                            //     softWrap: false,
-                            //   ),
-                            //   color: PsColors.mainColor,
-                            //   shape: const BeveledRectangleBorder(
-                            //       borderRadius: BorderRadius.all(
-                            //     Radius.circular(PsDimens.space8),
-                            //   )),
-                            //   textColor: Theme.of(context).textTheme.button.copyWith(color: PsColors.white).color,
-                            //   onPressed: () async {
-                            PSButtonWithIconWidget(
+                        child: PSButtonWithIconWidget(
                           hasShadow: true,
                           width: double.infinity,
                           icon: Icons.edit,
@@ -1921,68 +1391,6 @@ class _EditAndDeleteButtonWidget extends StatelessWidget {
     } else {
       return Container();
     }
-  }
-}
-
-class _IconsAndTowTitleWithColumnTextWidget extends StatelessWidget {
-  const _IconsAndTowTitleWithColumnTextWidget({
-    Key key,
-    @required this.icon,
-    @required this.title,
-    @required this.subTitle,
-    @required this.color,
-  }) : super(key: key);
-
-  final IconData icon;
-  final String title;
-  final String subTitle;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-          left: PsDimens.space16,
-          right: PsDimens.space16,
-          bottom: PsDimens.space16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Icon(
-            icon,
-            size: PsDimens.space18,
-          ),
-          const SizedBox(
-            width: PsDimens.space16,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                title,
-                style: color == null
-                    ? Theme.of(context).textTheme.bodyText1
-                    : Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        .copyWith(color: color),
-              ),
-
-              Text(
-                subTitle,
-                style: color == null
-                    ? Theme.of(context).textTheme.bodyText1
-                    : Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        .copyWith(color: color),
-              )
-              // )
-            ],
-          )
-        ],
-      ),
-    );
   }
 }
 
