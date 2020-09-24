@@ -698,7 +698,7 @@ class _HomeViewState extends State<DashboardView>
                       ),
                     ),
                     BottomNavigationBarItem(
-                      icon: const Icon(Icons.brightness_1),
+                      icon: const Icon(Icons.camera_alt),
                       title: Text(
                         Utils.getString(
                             context, 'dashboard__bottom_navigation_catogory'),

@@ -546,37 +546,48 @@ class __RecentProductHorizontalListWidgetState
                     },
                   ),
                   // ANCHOR here to edit infinite list
-                  Container(
-                    height: PsDimens.space340,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: productProvider.productList.data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (productProvider.productList.status ==
-                              PsStatus.BLOCK_LOADING) {
-                            return Shimmer.fromColors(
-                                baseColor: PsColors.grey,
-                                highlightColor: PsColors.white,
-                                child: Row(children: const <Widget>[
-                                  PsFrameUIForLoading(),
-                                ]));
-                          } else {
-                            final Product product =
-                                productProvider.productList.data[index];
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: CustomScrollView(
+                      scrollDirection: Axis.vertical,
+                      primary: false,
+                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      slivers: <Widget>[
+                        SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            // maxCrossAxisExtent: 250,
+                            // childAspectRatio: 0.7,
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 0.86,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                            final int count =
+                                productProvider.productList.data.length;
                             // return Container(
                             //   color: Colors.black,
-                            //   height: 120,
-                            //   width: 9,
                             // );
-                            return MyproductVertical(
+                            return Mysproo(
                               coreTagKey: productProvider.hashCode.toString() +
-                                  product.id,
+                                  productProvider.productList.data[index].id,
                               product: productProvider.productList.data[index],
+                              animationController: widget.animationController,
+                              animation:
+                                  Tween<double>(begin: 0.0, end: 1.0).animate(
+                                CurvedAnimation(
+                                  parent: widget.animationController,
+                                  curve: Interval((1 / count) * index, 1.0,
+                                      curve: Curves.fastOutSlowIn),
+                                ),
+                              ),
                               onTap: () {
-                                print(productProvider.productList.data[index]
-                                    .defaultPhoto.imgPath);
-
+                                final Product product = productProvider
+                                    .productList.data.reversed
+                                    .toList()[index];
                                 final ProductDetailIntentHolder holder =
                                     ProductDetailIntentHolder(
                                         product: productProvider
@@ -594,11 +605,12 @@ class __RecentProductHorizontalListWidgetState
                                     arguments: holder);
                               },
                             );
-                          }
-                        }),
-                  ),
-                  const PsAdMobBannerWidget(
-                    admobBannerSize: AdmobBannerSize.MEDIUM_RECTANGLE,
+                          },
+                              childCount:
+                                  productProvider.productList.data.length),
+                        ),
+                      ],
+                    ),
                   ),
                 ])
               : Container(),

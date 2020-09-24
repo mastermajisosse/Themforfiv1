@@ -208,7 +208,7 @@ class _ProductDetailState extends State<ProductDetailView>
                           SliverAppBar(
                             automaticallyImplyLeading: true,
                             brightness: Utils.getBrightnessForAppBar(context),
-                            expandedHeight: PsDimens.space300,
+                            expandedHeight: PsDimens.space380,
                             iconTheme: Theme.of(context)
                                 .iconTheme
                                 .copyWith(color: PsColors.mainColor),
@@ -233,469 +233,390 @@ class _ProductDetailState extends State<ProductDetailView>
                             flexibleSpace: FlexibleSpaceBar(
                               background: Container(
                                 color: PsColors.backgroundColor,
-                                child: CarouselSlider(
-                                  options: CarouselOptions(
-                                    enlargeCenterPage: true,
-                                    autoPlay: false,
-                                    viewportFraction: 0.8,
-                                    enableInfiniteScroll: false,
-                                    autoPlayInterval:
-                                        const Duration(seconds: 5),
-                                    onPageChanged: (int i,
-                                        CarouselPageChangedReason reason) {},
-                                  ),
-                                  items: List.generate(
-                                      int.parse(widget.product.photoCount),
-                                      (index) {
-                                    // widget.product.map((Blog blogProduct) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: PsColors.mainLightShadowColor,
-                                        ),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(PsDimens.space8)),
-                                        boxShadow: <BoxShadow>[
-                                          BoxShadow(
-                                              color:
-                                                  PsColors.mainLightShadowColor,
-                                              offset: const Offset(1.1, 1.1),
-                                              blurRadius: PsDimens.space8),
-                                        ],
-                                      ),
-                                      child: PsWidgetWithAppBarNoAppBarTitle<
-                                          GalleryProvider>(initProvider: () {
-                                        return GalleryProvider(
-                                            repo: galleryRepo);
-                                      }, onProviderReady:
-                                          (GalleryProvider provider2) async {
-                                        await provider2.loadImageList(
-                                            widget.product.defaultPhoto
-                                                .imgParentId,
-                                            PsConst.ITEM_TYPE);
-                                      }, builder: (BuildContext context,
-                                          GalleryProvider provider2,
-                                          Widget child) {
-                                        return Stack(
-                                          alignment: Alignment.bottomRight,
+                                child: Stack(
+                                  alignment: Alignment.bottomRight,
+                                  children: <Widget>[
+                                    PsNetworkImage(
+                                      photoKey: widget.heroTagImage,
+                                      defaultPhoto: widget.product.defaultPhoto,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, RoutePaths.galleryGrid,
+                                            arguments: widget.product);
+                                      },
+                                    ),
+                                    if (provider.itemDetail.data.addedUserId ==
+                                        provider.psValueHolder.loginUserId)
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            left: PsDimens.space12,
+                                            right: PsDimens.space12),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          mainAxisSize: MainAxisSize.max,
                                           children: <Widget>[
-                                            provider2.isLoading
-                                                ? Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  )
-                                                : PsNetworkImageWithUrl(
-                                                    photoKey: '',
-                                                    width: double.infinity,
-                                                    height: double.infinity,
-                                                    imagePath: provider2
-                                                            .galleryList
-                                                            .data
-                                                            .isEmpty
-                                                        ? 'assets/images/placeholder_image.png'
-                                                        : provider2
-                                                            .galleryList
-                                                            .data[index]
-                                                            .imgPath,
-                                                    // onTap: widget.onImageTap,
-                                                    boxfit: BoxFit.cover,
-                                                  ),
                                             if (provider.itemDetail.data
-                                                    .addedUserId ==
-                                                provider
-                                                    .psValueHolder.loginUserId)
+                                                    .paidStatus ==
+                                                PsConst.ADSPROGRESS)
                                               Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: PsDimens.space12,
-                                                    right: PsDimens.space12),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: <Widget>[
-                                                    if (provider.itemDetail.data
-                                                            .paidStatus ==
-                                                        PsConst.ADSPROGRESS)
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        PsDimens
-                                                                            .space4),
-                                                            color: PsColors
-                                                                .paidAdsColor),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .all(
-                                                                PsDimens
-                                                                    .space12),
-                                                        child: Text(
-                                                          Utils.getString(
-                                                              context,
-                                                              'paid__ads_in_progress'),
-                                                          style: Theme.of(
-                                                                  context)
-                                                              .textTheme
-                                                              .bodyText2
-                                                              .copyWith(
-                                                                  color: PsColors
-                                                                      .white),
-                                                        ),
-                                                      )
-                                                    else if (provider
-                                                                .itemDetail
-                                                                .data
-                                                                .paidStatus ==
-                                                            PsConst
-                                                                .ADSFINISHED &&
-                                                        provider.itemDetail.data
-                                                                .addedUserId ==
-                                                            provider
-                                                                .psValueHolder
-                                                                .loginUserId)
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        PsDimens
-                                                                            .space4),
-                                                            color:
-                                                                PsColors.black),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .all(
-                                                                PsDimens
-                                                                    .space12),
-                                                        child: Text(
-                                                          Utils.getString(
-                                                              context,
-                                                              'paid__ads_in_completed'),
-                                                          style: Theme.of(
-                                                                  context)
-                                                              .textTheme
-                                                              .bodyText2
-                                                              .copyWith(
-                                                                  color: PsColors
-                                                                      .white),
-                                                        ),
-                                                      )
-                                                    else if (provider.itemDetail
-                                                            .data.paidStatus ==
-                                                        PsConst.ADSNOTYETSTART)
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        PsDimens
-                                                                            .space4),
-                                                            color:
-                                                                Colors.yellow),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .all(
-                                                                PsDimens
-                                                                    .space12),
-                                                        child: Text(
-                                                          Utils.getString(
-                                                              context,
-                                                              'paid__ads_is_not_yet_start'),
-                                                          style: Theme.of(
-                                                                  context)
-                                                              .textTheme
-                                                              .bodyText2
-                                                              .copyWith(
-                                                                  color: PsColors
-                                                                      .white),
-                                                        ),
-                                                      )
-                                                    else
-                                                      Container(),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: <Widget>[
-                                                        if (provider
-                                                                .itemDetail
-                                                                .data
-                                                                .isSoldOut ==
-                                                            '1')
-                                                          Container(
-                                                            decoration: BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                        PsDimens
-                                                                            .space4),
-                                                                color: PsColors
-                                                                    .mainColor),
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .all(
-                                                                    PsDimens
-                                                                        .space12),
-                                                            child: Text(
-                                                              Utils.getString(
-                                                                  context,
-                                                                  'item_detail__sold'),
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .bodyText2
-                                                                  .copyWith(
-                                                                      color: PsColors
-                                                                          .white),
-                                                            ),
-                                                          )
-                                                        else
-                                                          InkWell(
-                                                            onTap: () {
-                                                              showDialog<
-                                                                      dynamic>(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (BuildContext
-                                                                          context) {
-                                                                    return ConfirmDialogView(
-                                                                        description: Utils.getString(
-                                                                            context,
-                                                                            'item_detail__sold_out_item'),
-                                                                        leftButtonText: Utils.getString(
-                                                                            context,
-                                                                            'item_detail__sold_out_dialog_cancel_button'),
-                                                                        rightButtonText: Utils.getString(
-                                                                            context,
-                                                                            'item_detail__sold_out_dialog_ok_button'),
-                                                                        onAgreeTap:
-                                                                            () async {
-                                                                          await markSoldOutItemProvider.loadmarkSoldOutItem(
-                                                                              psValueHolder.loginUserId,
-                                                                              markSoldOutItemHolder);
-                                                                          if (markSoldOutItemProvider.markSoldOutItem != null &&
-                                                                              markSoldOutItemProvider.markSoldOutItem.data != null) {
-                                                                            setState(() {
-                                                                              provider.itemDetail.data.isSoldOut = markSoldOutItemProvider.markSoldOutItem.data.isSoldOut;
-                                                                            });
-                                                                          }
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                        });
-                                                                  });
-                                                            },
-                                                            child: Container(
-                                                              decoration: BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(
-                                                                          PsDimens
-                                                                              .space4),
-                                                                  color: PsColors
-                                                                      .mainColor),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .all(
-                                                                      PsDimens
-                                                                          .space12),
-                                                              child: Text(
-                                                                Utils.getString(
-                                                                    context,
-                                                                    'item_detail__mark_sold'),
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyText2
-                                                                    .copyWith(
-                                                                        color: PsColors
-                                                                            .white),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        InkWell(
-                                                          child: Container(
-                                                            decoration: BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                        PsDimens
-                                                                            .space4),
-                                                                color: Colors
-                                                                    .black45),
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .all(
-                                                                    PsDimens
-                                                                        .space12),
-                                                            child: Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .end,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              children: <
-                                                                  Widget>[
-                                                                Icon(
-                                                                  Ionicons
-                                                                      .md_images,
-                                                                  color: PsColors
-                                                                      .white,
-                                                                ),
-                                                                const SizedBox(
-                                                                    width: PsDimens
-                                                                        .space12),
-                                                                Text(
-                                                                  '${widget.product.photoCount}  ${Utils.getString(context, 'item_detail__photo')}',
-                                                                  style: Theme.of(
-                                                                          context)
-                                                                      .textTheme
-                                                                      .bodyText2
-                                                                      .copyWith(
-                                                                          color:
-                                                                              PsColors.white),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          onTap: () {
-                                                            Navigator.pushNamed(
-                                                                context,
-                                                                RoutePaths
-                                                                    .galleryGrid,
-                                                                arguments: widget
-                                                                    .product);
-                                                          },
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            PsDimens.space4),
+                                                    color:
+                                                        PsColors.paidAdsColor),
+                                                padding: const EdgeInsets.all(
+                                                    PsDimens.space12),
+                                                child: Text(
+                                                  Utils.getString(context,
+                                                      'paid__ads_in_progress'),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText2
+                                                      .copyWith(
+                                                          color:
+                                                              PsColors.white),
+                                                ),
+                                              )
+                                            else if (provider.itemDetail.data
+                                                        .paidStatus ==
+                                                    PsConst.ADSFINISHED &&
+                                                provider.itemDetail.data
+                                                        .addedUserId ==
+                                                    provider.psValueHolder
+                                                        .loginUserId)
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            PsDimens.space4),
+                                                    color: PsColors.black),
+                                                padding: const EdgeInsets.all(
+                                                    PsDimens.space12),
+                                                child: Text(
+                                                  Utils.getString(context,
+                                                      'paid__ads_in_completed'),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText2
+                                                      .copyWith(
+                                                          color:
+                                                              PsColors.white),
+                                                ),
+                                              )
+                                            else if (provider.itemDetail.data
+                                                    .paidStatus ==
+                                                PsConst.ADSNOTYETSTART)
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            PsDimens.space4),
+                                                    color: Colors.yellow),
+                                                padding: const EdgeInsets.all(
+                                                    PsDimens.space12),
+                                                child: Text(
+                                                  Utils.getString(context,
+                                                      'paid__ads_is_not_yet_start'),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText2
+                                                      .copyWith(
+                                                          color:
+                                                              PsColors.white),
                                                 ),
                                               )
                                             else
-                                              Padding(
+                                              Container(),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                if (provider.itemDetail.data
+                                                        .isSoldOut ==
+                                                    '1')
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    PsDimens
+                                                                        .space4),
+                                                        color:
+                                                            PsColors.mainColor),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            PsDimens.space12),
+                                                    child: Text(
+                                                      Utils.getString(context,
+                                                          'item_detail__sold'),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText2
+                                                          .copyWith(
+                                                              color: PsColors
+                                                                  .white),
+                                                    ),
+                                                  )
+                                                else
+                                                  InkWell(
+                                                    onTap: () {
+                                                      showDialog<dynamic>(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return ConfirmDialogView(
+                                                                description: Utils
+                                                                    .getString(
+                                                                        context,
+                                                                        'item_detail__sold_out_item'),
+                                                                leftButtonText:
+                                                                    Utils.getString(
+                                                                        context,
+                                                                        'item_detail__sold_out_dialog_cancel_button'),
+                                                                rightButtonText:
+                                                                    Utils.getString(
+                                                                        context,
+                                                                        'item_detail__sold_out_dialog_ok_button'),
+                                                                onAgreeTap:
+                                                                    () async {
+                                                                  await markSoldOutItemProvider.loadmarkSoldOutItem(
+                                                                      psValueHolder
+                                                                          .loginUserId,
+                                                                      markSoldOutItemHolder);
+                                                                  if (markSoldOutItemProvider
+                                                                              .markSoldOutItem !=
+                                                                          null &&
+                                                                      markSoldOutItemProvider
+                                                                              .markSoldOutItem
+                                                                              .data !=
+                                                                          null) {
+                                                                    setState(
+                                                                        () {
+                                                                      provider.itemDetail.data.isSoldOut = markSoldOutItemProvider
+                                                                          .markSoldOutItem
+                                                                          .data
+                                                                          .isSoldOut;
+                                                                    });
+                                                                  }
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                });
+                                                          });
+                                                    },
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      PsDimens
+                                                                          .space4),
+                                                          color: PsColors
+                                                              .mainColor),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              PsDimens.space12),
+                                                      child: Text(
+                                                        Utils.getString(context,
+                                                            'item_detail__mark_sold'),
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText2
+                                                            .copyWith(
+                                                                color: PsColors
+                                                                    .white),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                InkWell(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    PsDimens
+                                                                        .space4),
+                                                        color: Colors.black45),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            PsDimens.space12),
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: <Widget>[
+                                                        Icon(
+                                                          Ionicons.md_images,
+                                                          color: PsColors.white,
+                                                        ),
+                                                        const SizedBox(
+                                                            width: PsDimens
+                                                                .space12),
+                                                        Text(
+                                                          '${widget.product.photoCount}  ${Utils.getString(context, 'item_detail__photo')}',
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .bodyText2
+                                                              .copyWith(
+                                                                  color: PsColors
+                                                                      .white),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  onTap: () {
+                                                    Navigator.pushNamed(context,
+                                                        RoutePaths.galleryGrid,
+                                                        arguments:
+                                                            widget.product);
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    else
+                                      Padding(
+                                        padding: const EdgeInsets.all(
+                                            PsDimens.space8),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: <Widget>[
+                                            if (provider.itemDetail.data
+                                                    .paidStatus ==
+                                                PsConst.ADSPROGRESS)
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            PsDimens.space4),
+                                                    color:
+                                                        PsColors.paidAdsColor),
                                                 padding: const EdgeInsets.all(
-                                                    PsDimens.space8),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.end,
-                                                  children: <Widget>[
-                                                    if (provider.itemDetail.data
-                                                            .paidStatus ==
-                                                        PsConst.ADSPROGRESS)
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        PsDimens
-                                                                            .space4),
-                                                            color: PsColors
-                                                                .paidAdsColor),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .all(
-                                                                PsDimens
-                                                                    .space12),
-                                                        child: Text(
-                                                          Utils.getString(
-                                                              context,
-                                                              'paid__ads_in_progress'),
-                                                          style: Theme.of(
-                                                                  context)
-                                                              .textTheme
-                                                              .bodyText2
-                                                              .copyWith(
-                                                                  color: PsColors
-                                                                      .white),
-                                                        ),
-                                                      )
-                                                    else if (provider
-                                                                .itemDetail
-                                                                .data
-                                                                .paidStatus ==
-                                                            PsConst
-                                                                .ADSFINISHED &&
-                                                        provider.itemDetail.data
-                                                                .addedUserId ==
-                                                            provider
-                                                                .psValueHolder
-                                                                .loginUserId)
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        PsDimens
-                                                                            .space4),
-                                                            color:
-                                                                PsColors.black),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .all(
-                                                                PsDimens
-                                                                    .space12),
-                                                        child: Text(
-                                                          Utils.getString(
-                                                              context,
-                                                              'paid__ads_in_completed'),
-                                                          style: Theme.of(
-                                                                  context)
-                                                              .textTheme
-                                                              .bodyText2
-                                                              .copyWith(
-                                                                  color: PsColors
-                                                                      .white),
-                                                        ),
-                                                      )
-                                                    else if (provider.itemDetail
-                                                            .data.paidStatus ==
-                                                        PsConst.ADSNOTYETSTART)
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        PsDimens
-                                                                            .space4),
-                                                            color:
-                                                                Colors.yellow),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .all(
-                                                                PsDimens
-                                                                    .space12),
-                                                        child: Text(
-                                                          Utils.getString(
-                                                              context,
-                                                              'paid__ads_is_not_yet_start'),
-                                                          style: Theme.of(
-                                                                  context)
-                                                              .textTheme
-                                                              .bodyText2
-                                                              .copyWith(
-                                                                  color: PsColors
-                                                                      .white),
-                                                        ),
-                                                      )
-                                                    else
-                                                      Container(),
-                                                  ],
+                                                    PsDimens.space12),
+                                                child: Text(
+                                                  Utils.getString(context,
+                                                      'paid__ads_in_progress'),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText2
+                                                      .copyWith(
+                                                          color:
+                                                              PsColors.white),
                                                 ),
                                               )
+                                            else if (provider.itemDetail.data
+                                                        .paidStatus ==
+                                                    PsConst.ADSFINISHED &&
+                                                provider.itemDetail.data
+                                                        .addedUserId ==
+                                                    provider.psValueHolder
+                                                        .loginUserId)
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            PsDimens.space4),
+                                                    color: PsColors.black),
+                                                padding: const EdgeInsets.all(
+                                                    PsDimens.space12),
+                                                child: Text(
+                                                  Utils.getString(context,
+                                                      'paid__ads_in_completed'),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText2
+                                                      .copyWith(
+                                                          color:
+                                                              PsColors.white),
+                                                ),
+                                              )
+                                            else if (provider.itemDetail.data
+                                                    .paidStatus ==
+                                                PsConst.ADSNOTYETSTART)
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            PsDimens.space4),
+                                                    color: Colors.yellow),
+                                                padding: const EdgeInsets.all(
+                                                    PsDimens.space12),
+                                                child: Text(
+                                                  Utils.getString(context,
+                                                      'paid__ads_is_not_yet_start'),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText2
+                                                      .copyWith(
+                                                          color:
+                                                              PsColors.white),
+                                                ),
+                                              )
+                                            else
+                                              Container(),
+                                            InkWell(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            PsDimens.space4),
+                                                    color: Colors.black45),
+                                                padding: const EdgeInsets.all(
+                                                    PsDimens.space12),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: <Widget>[
+                                                    Icon(
+                                                      Ionicons.md_images,
+                                                      color: PsColors.white,
+                                                    ),
+                                                    const SizedBox(
+                                                        width:
+                                                            PsDimens.space12),
+                                                    Text(
+                                                      '${widget.product.photoCount}  ${Utils.getString(context, 'item_detail__photo')}',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText2
+                                                          .copyWith(
+                                                              color: PsColors
+                                                                  .white),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                Navigator.pushNamed(context,
+                                                    RoutePaths.galleryGrid,
+                                                    arguments: widget.product);
+                                              },
+                                            ),
                                           ],
-                                        );
-                                      }),
-                                    );
-                                  }),
+                                        ),
+                                      )
+                                  ],
                                 ),
                               ),
                             ),

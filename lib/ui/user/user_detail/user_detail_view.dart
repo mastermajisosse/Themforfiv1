@@ -323,68 +323,68 @@ class __ImageAndTextWidgetState extends State<_ImageAndTextWidget> {
           _spacingWidget,
           if (widget.userProvider.psValueHolder.loginUserId !=
               widget.userProvider.user.data.userId)
-          MaterialButton(
-            color: PsColors.mainColor,
-            height: 45,
-            shape: const BeveledRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(7.0)),
-            ),
-            child: widget.userProvider.user.data.isFollowed == PsConst.ONE
-                ? Text(
-                    Utils.getString(context, 'user_detail__unfollow'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .button
-                        .copyWith(color: Colors.white),
-                  )
-                : Text(
-                    Utils.getString(context, 'user_detail__follow'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .button
-                        .copyWith(color: Colors.white),
-                  ),
-            onPressed: () async {
-              if (await Utils.checkInternetConnectivity()) {
-                Utils.navigateOnUserVerificationView(
-                    widget.userProvider, context, () async {
-                  if (widget.userProvider.user.data.isFollowed ==
-                      PsConst.ZERO) {
-                    setState(() {
-                      widget.userProvider.user.data.isFollowed = PsConst.ONE;
-                    });
-                  } else {
-                    setState(() {
-                      widget.userProvider.user.data.isFollowed = PsConst.ZERO;
-                    });
-                  }
-
-                  final UserFollowHolder userFollowHolder = UserFollowHolder(
-                      userId: widget.userProvider.psValueHolder.loginUserId,
-                      followedUserId: widget.data.userId);
-
-                  final PsResource<User> _user = await widget.userProvider
-                      .postUserFollow(userFollowHolder.toMap());
-                  if (_user.data != null) {
-                    if (_user.data.isFollowed == PsConst.ONE) {
-                      widget.userProvider.user.data.isFollowed = PsConst.ONE;
+            MaterialButton(
+              color: PsColors.mainColor,
+              height: 45,
+              shape: const BeveledRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(7.0)),
+              ),
+              child: widget.userProvider.user.data.isFollowed == PsConst.ONE
+                  ? Text(
+                      Utils.getString(context, 'user_detail__unfollow'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .button
+                          .copyWith(color: Colors.white),
+                    )
+                  : Text(
+                      Utils.getString(context, 'user_detail__follow'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .button
+                          .copyWith(color: Colors.white),
+                    ),
+              onPressed: () async {
+                if (await Utils.checkInternetConnectivity()) {
+                  Utils.navigateOnUserVerificationView(
+                      widget.userProvider, context, () async {
+                    if (widget.userProvider.user.data.isFollowed ==
+                        PsConst.ZERO) {
+                      setState(() {
+                        widget.userProvider.user.data.isFollowed = PsConst.ONE;
+                      });
                     } else {
-                      widget.userProvider.user.data.isFollowed = PsConst.ZERO;
+                      setState(() {
+                        widget.userProvider.user.data.isFollowed = PsConst.ZERO;
+                      });
                     }
-                  }
-                });
-              } else {
-                showDialog<dynamic>(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return ErrorDialog(
-                        message: Utils.getString(
-                            context, 'error_dialog__no_internet'),
-                      );
-                    });
-              }
-            },
-          ),
+
+                    final UserFollowHolder userFollowHolder = UserFollowHolder(
+                        userId: widget.userProvider.psValueHolder.loginUserId,
+                        followedUserId: widget.data.userId);
+
+                    final PsResource<User> _user = await widget.userProvider
+                        .postUserFollow(userFollowHolder.toMap());
+                    if (_user.data != null) {
+                      if (_user.data.isFollowed == PsConst.ONE) {
+                        widget.userProvider.user.data.isFollowed = PsConst.ONE;
+                      } else {
+                        widget.userProvider.user.data.isFollowed = PsConst.ZERO;
+                      }
+                    }
+                  });
+                } else {
+                  showDialog<dynamic>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ErrorDialog(
+                          message: Utils.getString(
+                              context, 'error_dialog__no_internet'),
+                        );
+                      });
+                }
+              },
+            ),
           _spacingWidget,
           _dividerWidget,
           _spacingWidget,
@@ -405,12 +405,11 @@ class __ImageAndTextWidgetState extends State<_ImageAndTextWidget> {
           _spacingWidget,
           InkWell(
             onTap: () {
-              Navigator.pushNamed(
-                context, RoutePaths.userItemList,
-                arguments: ItemListIntentHolder(userId: widget.data.userId
-                    ,status: '1',
-                    title: Utils.getString(context, 'profile__listing'))
-                );
+              Navigator.pushNamed(context, RoutePaths.userItemList,
+                  arguments: ItemListIntentHolder(
+                      userId: widget.data.userId,
+                      status: '1',
+                      title: Utils.getString(context, 'profile__listing')));
             },
             child: Container(
               margin: const EdgeInsets.only(bottom: PsDimens.space8),

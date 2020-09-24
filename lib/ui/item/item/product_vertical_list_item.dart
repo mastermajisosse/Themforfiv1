@@ -87,9 +87,11 @@ class ProductVeticalListItem extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(product.user.userName == ''?
-                                    Utils.getString(context, 'default__user_name'):
-                                    '${product.user.userName}',
+                                  Text(
+                                      product.user.userName == ''
+                                          ? Utils.getString(
+                                              context, 'default__user_name')
+                                          : '${product.user.userName}',
                                       textAlign: TextAlign.start,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,

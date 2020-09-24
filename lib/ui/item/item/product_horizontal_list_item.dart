@@ -35,14 +35,14 @@ class ProductHorizontalListItem extends StatelessWidget {
               elevation: 0.0,
               color: PsColors.transparent,
               child: Container(
-                margin: const EdgeInsets.symmetric(
-                    horizontal: PsDimens.space4, vertical: PsDimens.space12),
+                // margin: const EdgeInsets.symmetric(
+                //     horizontal: PsDimens.space4, vertical: PsDimens.space12),
                 decoration: BoxDecoration(
                   color: PsColors.backgroundColor,
                   borderRadius:
                       const BorderRadius.all(Radius.circular(PsDimens.space8)),
                 ),
-                width: PsDimens.space180,
+                width: PsDimens.space220,
                 // child:
                 //  ClipPath(
                 // child: Container(
@@ -129,7 +129,7 @@ class ProductHorizontalListItem extends StatelessWidget {
                                 photoKey:
                                     '$coreTagKey${PsConst.HERO_TAG__IMAGE}',
                                 defaultPhoto: product.defaultPhoto,
-                                width: PsDimens.space180,
+                                width: PsDimens.space220,
                                 height: double.infinity,
                                 boxfit: BoxFit.cover,
                                 onTap: () {
@@ -187,48 +187,7 @@ class ProductHorizontalListItem extends StatelessWidget {
                         //     ),
                         //   ),
                         // ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: PsDimens.space8,
-                              top: PsDimens.space12,
-                              right: PsDimens.space8),
-                          child: Row(
-                            children: <Widget>[
-                              PsHero(
-                                tag: '$coreTagKey$PsConst.HERO_TAG__UNIT_PRICE',
-                                flightShuttleBuilder:
-                                    Utils.flightShuttleBuilder,
-                                child: Material(
-                                  type: MaterialType.transparency,
-                                  child: Text(
-                                      product.price != ''
-                                          ? '${product.itemCurrency.currencySymbol}${Utils.getPriceFormat(product.price)}'
-                                          : '',
-                                      textAlign: TextAlign.start,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2
-                                          .copyWith(color: PsColors.mainColor)),
-                                ),
-                              ),
-                              // Flexible(
-                              //   child: Padding(
-                              //       padding: const EdgeInsets.only(
-                              //           left: PsDimens.space8,
-                              //           right: PsDimens.space8),
-                              //       child: Text(
-                              //           '(${product.conditionOfItem.name})',
-                              //           textAlign: TextAlign.start,
-                              //           overflow: TextOverflow.ellipsis,
-                              //           style: Theme.of(context)
-                              //               .textTheme
-                              //               .bodyText2
-                              //               .copyWith(
-                              //                   color: PsColors.mainColor))),
-                              // )
-                            ],
-                          ),
-                        ),
+
                         // Padding(
                         //   padding: const EdgeInsets.only(
                         //       left: PsDimens.space8,
@@ -256,10 +215,10 @@ class ProductHorizontalListItem extends StatelessWidget {
                         // ),
                         Padding(
                           padding: const EdgeInsets.only(
-                              left: PsDimens.space8,
-                              right: PsDimens.space8,
-                              top: PsDimens.space8,
-                              bottom: PsDimens.space16),
+                            left: PsDimens.space8,
+                            right: PsDimens.space8,
+                            top: PsDimens.space8,
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
@@ -282,6 +241,29 @@ class ProductHorizontalListItem extends StatelessWidget {
                                           style: Theme.of(context)
                                               .textTheme
                                               .caption))
+                                ],
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  PsHero(
+                                    tag:
+                                        '$coreTagKey$PsConst.HERO_TAG__UNIT_PRICE',
+                                    flightShuttleBuilder:
+                                        Utils.flightShuttleBuilder,
+                                    child: Material(
+                                      type: MaterialType.transparency,
+                                      child: Text(
+                                          product.price != ''
+                                              ? '${product.itemCurrency.currencySymbol}${Utils.getPriceFormat(product.price)}'
+                                              : '',
+                                          textAlign: TextAlign.start,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2
+                                              .copyWith(
+                                                  color: PsColors.mainColor)),
+                                    ),
+                                  ),
                                 ],
                               ),
                               Row(
